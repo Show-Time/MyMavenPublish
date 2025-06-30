@@ -1,0 +1,53 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    id 'maven-publish'
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release         // 表示发布 release（jitpack 都不会使用到）
+                groupId = 'com.github.yang-seven' // 这个是依赖库的组 id
+                artifactId = 'jitLibrary'       // 依赖库的名称（jitpack 都不会使用到）
+                version = "1.0.0" //
+            }
+        }
+    }//com.github.yang-seven:jitLibrary:1.0.0
+}
+
+android {
+    namespace 'com.example.mylibrary'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 24
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
